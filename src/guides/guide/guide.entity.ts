@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Category } from '../category/category.entity';
 
 @Entity()
 export class Guide {
@@ -8,8 +9,8 @@ export class Guide {
   @Column({ unique: true })
   name: string;
 
-  @Column()
-  category: string;
+  @ManyToOne(type => Category, category => category.guides)
+  category: Category;
 
   @Column()
   type: string;
