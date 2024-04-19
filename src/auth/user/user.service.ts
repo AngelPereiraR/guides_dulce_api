@@ -43,12 +43,15 @@ export class UserService {
     }
   }
 
-  async login(email: string, password: string): Promise<string> {
+  async login(email: string, password: string): Promise<Object> {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user || !(await bcrypt.compare(password, user.password))) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
-    return this.jwtService.signAsync({id: user.id}, {secret: process.env.JWT_SEED});
+
+    const token = await this.jwtService.signAsync({id: user.id}, {secret: process.env.JWT_SEED});
+    const newUser = {...user, token}
+    return newUser;
   }
 
   async updateUser(id: number, userData: Partial<User>): Promise<User> {

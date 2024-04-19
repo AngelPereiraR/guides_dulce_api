@@ -24,9 +24,8 @@ export class UserController {
   }
 
   @Post('login')
-  async login(@Body('email') email: string, @Body('password') password: string): Promise<{ token: string }> {
-    const token = await this.userService.login(email, password);
-    return { token };
+  async login(@Body('email') email: string, @Body('password') password: string): Promise<Object> {
+    return this.userService.login(email, password);
   }
 
   @Put(':id')
