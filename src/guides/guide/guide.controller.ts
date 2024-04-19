@@ -13,6 +13,11 @@ export class GuideController {
     return this.guideService.findAll();
   }
 
+  @Get('findAllByCategoryId/:categoryId')
+  findAllByCategoryId(@Param('categoryId') categoryId: string): Promise<Guide[]> {
+    return this.guideService.findAllByCategoryId(parseInt(categoryId, 10));
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string): Promise<Guide> {
     return this.guideService.findOne(parseInt(id, 10));

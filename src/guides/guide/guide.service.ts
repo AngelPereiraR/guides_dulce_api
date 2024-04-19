@@ -3,16 +3,23 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Guide } from './guide.entity';
 import * as fs from 'fs';
+import { CategoryService } from '../category/category.service';
 
 @Injectable()
 export class GuideService {
   constructor(
+    private categoryService: CategoryService,
     @InjectRepository(Guide)
     private guideRepository: Repository<Guide>,
   ) {}
 
   async findAll(): Promise<Guide[]> {
     return this.guideRepository.find();
+  }
+
+  async findAllByCategoryId(categoryId: number): Promise<Guide[]> {
+    let category = await this.categoryService.findOne(categoryId);
+    return this.guideRepository.findBy(category);
   }
 
   async findOne(id: number): Promise<Guide> {
