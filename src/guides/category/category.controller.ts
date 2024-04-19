@@ -3,7 +3,7 @@ import { CategoryService } from './category.service';
 import { Category } from './category.entity';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
-@Controller('categorys')
+@Controller('categories')
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
