@@ -11,10 +11,4 @@ export class Category {
 
   @OneToMany(type => Guide, guide => guide.category)
   guides: Guide[];
-
-  @Column()
-  type: string;
-
-  @Column({ nullable: true })
-  url: string; // Se almacenará la imagen en formato base64
 }
