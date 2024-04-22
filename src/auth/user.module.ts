@@ -4,16 +4,17 @@ import { UserController } from './user/user.controller';
 import { User } from './user/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtModule } from '@nestjs/jwt';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Module({
     imports: [
         TypeOrmModule.forFeature([User]),
         JwtModule.register({
+          global: true,
           secret: process.env.JWT_SEED,
           signOptions: { expiresIn: '6h' },
         }),
     ],
-    providers: [UserService, JwtAuthGuard],
+    providers: [UserService, AuthGuard],
     controllers: [UserController]})
 export class UserModule {}

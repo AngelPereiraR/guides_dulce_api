@@ -2,7 +2,7 @@
 import { Controller, Get, Post, Body, Param, Delete, Put, UseGuards } from '@nestjs/common';
 import { User } from './user.entity';
 import { UserService } from './user.service';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('user')
 export class UserController {
@@ -29,13 +29,13 @@ export class UserController {
   }
 
   @Put(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   updateUser(@Param('id') id: string, @Body() user: User): Promise<User> {
     return this.userService.updateUser(parseInt(id, 10), user);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   deleteUser(@Param('id') id: string): Promise<void> {
     return this.userService.deleteUser(parseInt(id, 10));
   }

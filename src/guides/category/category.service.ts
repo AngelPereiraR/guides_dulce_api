@@ -19,8 +19,12 @@ export class CategoryService {
   }
 
   async create(categoryData: Partial<Category>): Promise<Category> {
-    const category = this.categoryRepository.create(categoryData);
+    try {
+      const category = this.categoryRepository.create(categoryData);
     return this.categoryRepository.save(category);
+    } catch (error) {
+      throw error;
+    }
   }
 
   async update(id: number, categoryData: Partial<Category>): Promise<Category> {

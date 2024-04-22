@@ -2,7 +2,7 @@ import { Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, Upl
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GuideService } from './guide.service';
 import { Guide } from './guide.entity';
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Controller('guides')
 export class GuideController {
@@ -24,25 +24,25 @@ export class GuideController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async create(@Body() guideData: Guide): Promise<Guide> {
     return this.guideService.create(guideData);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   async update(@Param('id') id: string, @Body() guideData: Guide): Promise<Guide> {
     return this.guideService.update(parseInt(id, 10), guideData);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   remove(@Param('id') id: string): Promise<void> {
     return this.guideService.remove(parseInt(id, 10));
   }
 
   @Put('uploadArchive/:id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('archive'))
   async uploadArchive(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
     await this.guideService.uploadArchive(parseInt(id, 10), archive);
