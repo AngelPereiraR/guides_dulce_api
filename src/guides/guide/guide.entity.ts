@@ -9,7 +9,7 @@ export class Guide {
   @Column({ unique: true })
   name: string;
 
-  @ManyToOne(type => Category, category => category.guides)
+  @ManyToOne(() => Category, category => category.guides)
   category: Category;
 
   @Column()

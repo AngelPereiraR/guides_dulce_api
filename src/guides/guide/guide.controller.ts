@@ -23,10 +23,10 @@ export class GuideController {
     return this.guideService.findOne(parseInt(id, 10));
   }
 
-  @Post()
+  @Post(':categoryId/create')
   @UseGuards(AuthGuard)
-  async create(@Body() guideData: Guide): Promise<Guide> {
-    return this.guideService.create(guideData);
+  async create(@Param('categoryId') categoryId: string, @Body() guideData: Guide): Promise<Guide> {
+    return this.guideService.create(parseInt(categoryId, 10), guideData);
   }
 
   @Patch(':id')
@@ -35,10 +35,10 @@ export class GuideController {
     return this.guideService.update(parseInt(id, 10), guideData);
   }
 
-  @Delete(':id')
+  @Delete(':categoryId/delete/:id')
   @UseGuards(AuthGuard)
-  remove(@Param('id') id: string): Promise<void> {
-    return this.guideService.remove(parseInt(id, 10));
+  remove(@Param('categoryId') categoryId: string, @Param('id') id: string): Promise<void> {
+    return this.guideService.remove(parseInt(categoryId, 10), parseInt(id, 10));
   }
 
   @Put('uploadArchive/:id')

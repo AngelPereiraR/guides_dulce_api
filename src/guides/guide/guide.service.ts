@@ -26,9 +26,17 @@ export class GuideService {
     return this.guideRepository.findOneBy({id});
   }
 
-  async create(guideData: Partial<Guide>): Promise<Guide> {
-    const guide = this.guideRepository.create(guideData);
-    return this.guideRepository.save(guide);
+  async create(categoryId: number, guideData: Partial<Guide>): Promise<Guide> {
+    const category = await this.categoryService.findOne(categoryId);
+    if(category) {
+      category.guideCount += 1;
+      await this.categoryService.update(category.id, category);
+      const guide = this.guideRepository.create(guideData);
+      guide.category = category;
+      await this.guideRepository.save(guide);
+      return guide;
+    }
+    throw new NotFoundException(`No encontramos la categoría nº ${categoryId}`)
   }
 
   async update(id: number, guideData: Partial<Guide>): Promise<Guide> {
@@ -36,8 +44,15 @@ export class GuideService {
     return this.guideRepository.findOneBy({id});
   }
 
-  async remove(id: number): Promise<void> {
-    await this.guideRepository.delete(id);
+  async remove(categoryId: number, id: number): Promise<void> {
+    const category = await this.categoryService.findOne(categoryId);
+    if(category) {
+      category.guideCount -= 1;
+      await this.categoryService.update(category.id, category);
+      await this.guideRepository.delete(id);
+      return;
+    }
+    throw new NotFoundException(`No encontramos la categoría nº ${categoryId}`)
   }
 
   async uploadArchive(id: number, archive: Express.Multer.File): Promise<void> {
