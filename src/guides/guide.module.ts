@@ -7,6 +7,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './category.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { join } from 'path';
         ];
       },
     }),
+    CloudinaryModule
   ],
   providers: [GuideService, AuthGuard],
   controllers: [GuideController],

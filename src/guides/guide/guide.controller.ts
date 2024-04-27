@@ -4,10 +4,11 @@ import { GuideService } from './guide.service';
 import { Guide } from './guide.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
 import { diskStorage } from 'multer';
+import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('guides')
 export class GuideController {
-  constructor(private readonly guideService: GuideService) {}
+  constructor(private readonly guideService: GuideService, private cloudinary: CloudinaryService) {}
 
   @Get()
   findAll(): Promise<Guide[]> {
@@ -44,33 +45,35 @@ export class GuideController {
 
   @Post('uploadImage/:id')
   @UseGuards(AuthGuard)
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'public/img',
-        filename: (req, file, cb) => {
-          cb(null, file.originalname);
-        },
-      }),
-    }),
-  )
-  async uploadImage(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
-    return this.guideService.uploadArchive(parseInt(id, 10), archive);
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadImage(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File) {
+    return await this.cloudinary
+      .uploadArchive(archive, 'image')
+      .then((data) => {
+        return this.guideService.uploadArchive(parseInt(id, 10), data);
+      })
+      .catch((err) => {
+        return {
+          statusCode: 400,
+          message: err.message,
+        };
+      });
   }
 
   @Post('uploadVideo/:id')
   @UseGuards(AuthGuard)
-  @UseInterceptors(
-    FileInterceptor('file', {
-      storage: diskStorage({
-        destination: 'public/video',
-        filename: (req, file, cb) => {
-          cb(null, file.originalname);
-        },
-      }),
-    }),
-  )
-  async uploadVideo(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
-    return this.guideService.uploadArchive(parseInt(id, 10), archive);
+  @UseInterceptors(FileInterceptor('file'))
+  async uploadVideo(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File) {
+    return await this.cloudinary
+    .uploadArchive(archive, 'video')
+      .then((data) => {
+        return this.guideService.uploadArchive(parseInt(id, 10), data);
+      })
+      .catch((err) => {
+        return {
+          statusCode: 400,
+          message: err.message,
+        };
+      });
   }
 }

@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Guide } from './guide.entity';
 import * as fs from 'fs';
 import { CategoryService } from '../category/category.service';
+import { UploadApiResponse, UploadApiErrorResponse } from 'cloudinary';
 
 @Injectable()
 export class GuideService {
@@ -55,12 +56,12 @@ export class GuideService {
     throw new NotFoundException(`No encontramos la categoría nº ${categoryId}`)
   }
 
-  async uploadArchive(id: number, archive: Express.Multer.File): Promise<void> {
+  async uploadArchive(id: number, archive: UploadApiResponse | UploadApiErrorResponse): Promise<void> {
     const guide = await this.guideRepository.findOneBy({id});
     if (!guide) {
       throw new NotFoundException(`Guide con id ${id} no encontrado`);
     }
-    guide.url = archive.path;
+    guide.url = archive.url;
     await this.guideRepository.save(guide);
   }
 }
