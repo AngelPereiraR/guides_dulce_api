@@ -3,6 +3,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { GuideService } from './guide.service';
 import { Guide } from './guide.entity';
 import { AuthGuard } from 'src/guards/auth.guard';
+import { diskStorage } from 'multer';
 
 @Controller('guides')
 export class GuideController {
@@ -41,10 +42,35 @@ export class GuideController {
     return this.guideService.remove(parseInt(categoryId, 10), parseInt(id, 10));
   }
 
-  @Put('uploadArchive/:id')
+  @Post('uploadImage/:id')
   @UseGuards(AuthGuard)
-  @UseInterceptors(FileInterceptor('archive'))
-  async uploadArchive(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
-    await this.guideService.uploadArchive(parseInt(id, 10), archive);
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'public/img',
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async uploadImage(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
+    return this.guideService.uploadArchive(parseInt(id, 10), archive);
+  }
+
+  @Post('uploadVideo/:id')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: 'public/video',
+        filename: (req, file, cb) => {
+          cb(null, file.originalname);
+        },
+      }),
+    }),
+  )
+  async uploadVideo(@Param('id') id: string, @UploadedFile() archive: Express.Multer.File): Promise<void> {
+    return this.guideService.uploadArchive(parseInt(id, 10), archive);
   }
 }

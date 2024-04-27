@@ -18,6 +18,6 @@ export class Guide {
   @Column()
   description: string;
 
-  @Column({ nullable: true })
+  @Column({default: ''})
   url: string; // Se almacenará la imagen en formato base64
 }

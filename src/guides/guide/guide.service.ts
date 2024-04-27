@@ -19,7 +19,7 @@ export class GuideService {
 
   async findAllByCategoryId(categoryId: number): Promise<Guide[]> {
     let category = await this.categoryService.findOne(categoryId);
-    return this.guideRepository.findBy(category);
+    return this.guideRepository.findBy({category});
   }
 
   async findOne(id: number): Promise<Guide> {
@@ -60,7 +60,7 @@ export class GuideService {
     if (!guide) {
       throw new NotFoundException(`Guide con id ${id} no encontrado`);
     }
-    guide.url = fs.readFileSync(archive.path, { encoding: 'base64' });
+    guide.url = archive.path;
     await this.guideRepository.save(guide);
   }
 }

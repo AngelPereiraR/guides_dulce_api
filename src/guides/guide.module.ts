@@ -5,11 +5,35 @@ import { AuthGuard } from 'src/guards/auth.guard';
 import { Guide } from './guide/guide.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './category.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Guide]),
-    forwardRef(() => CategoryModule)
+    forwardRef(() => CategoryModule),
+    ServeStaticModule.forRootAsync({
+      useFactory: () => {
+        const uploadsPath = join(__dirname, '..', '..', '..', 'public/video');
+        return [
+          {
+            rootPath: uploadsPath,
+            serveRoot: '/public/video',
+          },
+        ];
+      },
+    }),
+    ServeStaticModule.forRootAsync({
+      useFactory: () => {
+        const uploadsPath = join(__dirname, '..', '..', '..', 'public/img');
+        return [
+          {
+            rootPath: uploadsPath,
+            serveRoot: '/public/img',
+          },
+        ];
+      },
+    }),
   ],
   providers: [GuideService, AuthGuard],
   controllers: [GuideController],
