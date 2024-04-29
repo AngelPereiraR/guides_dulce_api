@@ -11,7 +11,11 @@ export class CategoryService {
   ) {}
 
   async findAll(): Promise<Category[]> {
-    return this.categoryRepository.find();
+    return this.categoryRepository.find({
+      order: {
+        id: 'ASC'
+      }
+    });
   }
 
   async findOne(id: number): Promise<Category> {

@@ -15,12 +15,16 @@ export class GuideService {
   ) {}
 
   async findAll(): Promise<Guide[]> {
-    return this.guideRepository.find();
+    return this.guideRepository.find({
+      order: {
+        id: 'ASC'
+      }
+    });
   }
 
   async findAllByCategoryId(categoryId: number): Promise<Guide[]> {
     let category = await this.categoryService.findOne(categoryId);
-    return this.guideRepository.findBy({category});
+    return (await this.guideRepository.findBy({category})).sort((a, b) => a.id - b.id);
   }
 
   async findOne(id: number): Promise<Guide> {
