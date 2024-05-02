@@ -3,7 +3,7 @@ import { HttpException, HttpStatus, Injectable, NotFoundException, UnauthorizedE
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from './user.entity';
-import * as bcrypt from 'bcrypt';
+import * as bcryptjs from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
@@ -39,7 +39,7 @@ export class UserService {
         throw new HttpException('El email ya está registrado', HttpStatus.BAD_REQUEST);
       }
       
-      const hashedPassword = await bcrypt.hash(user.password, 10);
+      const hashedPassword = await bcryptjs.hash(user.password, 10);
       const newUser = this.userRepository.create({ ...user, password: hashedPassword });
       return this.userRepository.save(newUser);
     } catch(error) {
@@ -49,7 +49,7 @@ export class UserService {
 
   async login(email: string, password: string): Promise<Object> {
     const user = await this.userRepository.findOne({ where: { email } });
-    if (!user || !(await bcrypt.compare(password, user.password))) {
+    if (!user || !(await bcryptjs.compare(password, user.password))) {
       throw new UnauthorizedException('Credenciales inválidas');
     }
 
