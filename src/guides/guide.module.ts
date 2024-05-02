@@ -1,13 +1,13 @@
 import { Module, forwardRef } from '@nestjs/common';
 import { GuideService } from './guide/guide.service';
 import { GuideController } from './guide/guide.controller';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { Guide } from './guide/guide.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { CategoryModule } from './category.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { CloudinaryModule } from 'src/cloudinary/cloudinary.module';
+import { CloudinaryModule } from '../cloudinary/cloudinary.module';
 
 @Module({
   imports: [

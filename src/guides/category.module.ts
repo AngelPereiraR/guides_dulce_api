@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { CategoryService } from './category/category.service';
 import { CategoryController } from './category/category.controller';
-import { AuthGuard } from 'src/guards/auth.guard';
+import { AuthGuard } from '../guards/auth.guard';
 import { Category } from './category/category.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 

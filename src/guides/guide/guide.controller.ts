@@ -1,9 +1,8 @@
-import { Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, UploadedFile, UseGuards, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Patch, Delete, UseInterceptors, UploadedFile, UseGuards } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { GuideService } from './guide.service';
 import { Guide } from './guide.entity';
-import { AuthGuard } from 'src/guards/auth.guard';
-import { diskStorage } from 'multer';
+import { AuthGuard } from '../../guards/auth.guard';
 import { CloudinaryService } from 'src/cloudinary/cloudinary.service';
 
 @Controller('guides')
