@@ -1,6 +1,4 @@
 # Configuraciones
-ormconfig.debug.ts
-ormconfig.production.ts
 .env
 
 # compiled output

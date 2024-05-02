@@ -8,7 +8,7 @@ import { ConfigModule } from '@nestjs/config';
 import { CloudinaryModule } from './cloudinary/cloudinary.module';
 
 // Cambiar este import de debug a production según necesidad
-import config from 'ormconfig.debug';
+import config from 'ormconfig';
 
 
 @Module({

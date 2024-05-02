@@ -19,7 +19,7 @@ export class CloudinaryService {
 
       if (type == 'image')
         upload = v2.uploader.upload_stream(
-          { public_id: fileName.originalname },
+          { public_id: fileName.originalname.split('.').at(0) },
           (error, result) => {
             if (error) return reject(error);
             resolve(result);
@@ -27,7 +27,7 @@ export class CloudinaryService {
         );
       else {
         upload = v2.uploader.upload_stream(
-          { resource_type: 'video', public_id: fileName.originalname },
+          { resource_type: 'video', public_id: fileName.originalname.split('.').at(0) },
           (error, result) => {
             if (error) return reject(error);
             resolve(result);
